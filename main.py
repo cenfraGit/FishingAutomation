@@ -170,7 +170,7 @@ class MainFrame(wx.Frame):
         self.mainSizer.Add(window=self.staticBoxSetup, pos=(0, 1), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT, border=dip(10))
         self.mainSizer.Add(window=self.staticBoxLogging, pos=(1, 0), span=(1, 2), flag=wx.EXPAND|wx.ALL, border=dip(10))
         
-        # set up growable columns
+        # set up growable row and col
         self.mainSizer.AddGrowableCol(1, 1)
         self.mainSizer.AddGrowableRow(1, 1)
         self.mainPanel.SetSizer(self.mainSizer)
@@ -194,15 +194,6 @@ class MainFrame(wx.Frame):
         logger = logging.getLogger()
         logger.addHandler(handler)
         logger.setLevel(logging.DEBUG)
-
-        # test
-        """
-        logging.debug('This is a debug message')
-        logging.info('This is an info message')
-        logging.warning('This is a warning message')
-        logging.error('This is an error message')
-        logging.critical('This is a critical message')
-        """
 
 
     def bmpScreenshot(self):
@@ -232,12 +223,12 @@ class MainFrame(wx.Frame):
         if distanceDetection.strip() == "" or distanceDetection == "0":
             logging.error("Enter a valid value for distance detection.")
             return
-        
+
+        # convert strings to float
         self.automationDelaySeconds = float(secondsPerCycle)
         self.distanceThatTriggersDetection = float(distanceDetection)
         self.delaySecondsAfterRetracting = float(delaySeconds)
         logging.info("Updated values correctly.")
-        
         
         # invert automation state
         self.automationState = not self.automationState
@@ -252,7 +243,8 @@ class MainFrame(wx.Frame):
         else:
             self.stStatus.SetForegroundColour(wx.RED)
         self.stStatus.SetLabel(status)
-        
+
+        # notify user of change through notification message
         msg = NotificationMessage(parent=self, title="Fishing Automation", message=f"Fishing Status: {status}")
         msg.Show()
 
@@ -304,7 +296,7 @@ class MainFrame(wx.Frame):
                     if distance > 0 and distance <self.distanceThatTriggersDetection:
                         # right click (retract hook)
                         pyautogui.click(button='right')
-                        logging.info(f"Caught fish.")
+                        # logging.info(f"Caught fish.")
                         self.hookIsThrown = False
                         logging.info(f"Hook is retracted.")
                         # delay because next lines will throw hook again
@@ -315,27 +307,24 @@ class MainFrame(wx.Frame):
                     pyautogui.click(button='right')
                     self.hookIsThrown = True
                     logging.info(f"Hook is thrown.")
-                    
+
+                # update preview image
                 self.previewImage.SetBitmap(wx.Bitmap.FromBuffer(self.imageResolution[0], self.imageResolution[1], self.imageOriginal))
 
-                
+                # cycle delay
                 time.sleep(self.automationDelaySeconds)
-        
-        return     
 
 
     def OnAbout(self, event):
         info = AboutDialogInfo()
         info.Name = "Fishing Automation"
         info.Version = f"{__version__}"
-        info.Copyright = "ceniceros"
+        info.Copyright = "cenfra"
         info.Description = wordwrap.wordwrap("A fishing automation tool for Minecraft Bedrock.", 400, wx.ClientDC(self))
-        #info.Developers = ["cenfra"]
         AboutBox(info)
 
 
     def OnClose(self, event):
-        logging.info(f"Exiting...")
         # unset thread variable
         self.threadIsActive = False
         # wait for thread to stop
@@ -346,7 +335,6 @@ class MainFrame(wx.Frame):
         self.Destroy()
         # completely exit program
         os._exit(1)
-
 
 
 # main application loop
