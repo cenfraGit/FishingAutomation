@@ -1,6 +1,8 @@
 # FishingAutomation
 A Minecraft Bedrock fishing automation program made with Python.
 
+![interface of the program](/images/gui.PNG)
+
 Video or it working: https://youtu.be/2GhL4LyC7fI
 
 # Usage
