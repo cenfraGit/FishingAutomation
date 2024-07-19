@@ -3,7 +3,7 @@ A fishing automation program for Minecraft Bedrock Edition.
 
 ![interface of the program](/images/gui.PNG)
 
-Video of it working: https://youtu.be/2GhL4LyC7fI
+Example video: https://youtu.be/2GhL4LyC7fI
 
 # Usage
 
