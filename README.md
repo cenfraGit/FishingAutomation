@@ -1,5 +1,5 @@
 # FishingAutomation
-A fishing automation program for Minecraft Bedrock Edition.
+A fishing automation program for Minecraft Bedrock Edition made with OpenCV.
 
 ![interface of the program](/images/gui.PNG)
 
